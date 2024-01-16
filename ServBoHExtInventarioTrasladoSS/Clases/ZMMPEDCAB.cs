@@ -2,7 +2,7 @@ using System;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Text;
-namespace ServicioExtracionOrdenesCompraDW.Clases
+namespace ServBoHExtInventarioTrasladoSS.Clases
 {
     [XmlRoot(ElementName = "Encabezado")]
     public class ZMMPEDCAB
