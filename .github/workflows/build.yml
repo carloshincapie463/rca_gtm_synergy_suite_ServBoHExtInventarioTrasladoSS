@@ -27,4 +27,4 @@ jobs:
         dotnet restore
       
     - name: Build
-      run: dotnet build ServBoHExtInventarioTrasladoSS.sln --configuration Release --no-restore
+      run: dotnet build ServBoHExtInventarioTrasladoSS.sln --configuration Debug --no-restore
