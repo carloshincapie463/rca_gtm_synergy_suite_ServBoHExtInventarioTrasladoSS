@@ -76,6 +76,11 @@ jobs:
           path: ~\.sonar\cache
           key: ${{ runner.os }}-sonar-cache
           restore-keys: ${{ runner.os }}-sonar-cache
+      
+      - name: Change Version of Java to JDK17
+        shell: bash
+        run: |
+         echo %PATH%
 
       - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
