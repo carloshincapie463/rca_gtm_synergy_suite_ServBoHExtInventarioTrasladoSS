@@ -78,6 +78,7 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar-cache
       
       - name: Change Version of Java to JDK17
+        shell: cmd
         run: |
          echo %PATH%
          java -version
