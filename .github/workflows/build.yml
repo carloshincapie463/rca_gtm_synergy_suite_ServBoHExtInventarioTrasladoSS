@@ -63,9 +63,9 @@ jobs:
         if: ${{ always() }}
     
   sonarcloud:
-    # needs: build
+    needs: build
     runs-on: windows-latest
-    name: Cache SonarCloud workspace
+    name: SonarCloud
     steps:
       - uses: actions/checkout@v4
         with:
@@ -77,12 +77,12 @@ jobs:
           key: ${{ runner.os }}-sonar-cache
           restore-keys: ${{ runner.os }}-sonar-cache
       
-      - name: Version jdk current
-        shell: cmd
-        run: |
-         echo %PATH%
-         echo %JAVA_HOME_17_X64%
-         java -version
+      # - name: Version jdk current
+      #   shell: cmd
+      #   run: |
+      #    echo %PATH%
+      #    echo %JAVA_HOME_17_X64%
+      #    java -version
       
       - name: Change Version of Java to JDK17
         uses: actions/setup-java@v4
