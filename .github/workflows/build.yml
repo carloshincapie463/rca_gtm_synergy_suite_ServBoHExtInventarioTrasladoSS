@@ -20,7 +20,7 @@ env:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-latest
     name: build
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
 
   test:
     needs: build
-    runs-on: windows-2019
+    runs-on: windows-latest
     name: test
     steps:
       - uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
     
   sonarcloud:
     needs: build
-    runs-on: windows-2019
+    runs-on: windows-latest
     name: Cache SonarCloud workspace
     steps:
       - uses: actions/checkout@v4
