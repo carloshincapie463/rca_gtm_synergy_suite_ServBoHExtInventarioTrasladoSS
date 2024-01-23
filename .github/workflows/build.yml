@@ -63,7 +63,7 @@ jobs:
         if: ${{ always() }}
     
   sonarcloud:
-    needs: build
+    # needs: build
     runs-on: windows-latest
     name: Cache SonarCloud workspace
     steps:
@@ -81,6 +81,7 @@ jobs:
         shell: cmd
         run: |
          echo %PATH%
+         echo %JAVA_HOME_17_X64%
          java -version
 
       - name: Cache SonarCloud scanner
