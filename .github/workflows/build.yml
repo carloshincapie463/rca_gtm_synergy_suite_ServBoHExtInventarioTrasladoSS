@@ -81,6 +81,7 @@ jobs:
         shell: bash
         run: |
          echo %PATH%
+         java -version
 
       - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
