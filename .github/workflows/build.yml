@@ -1,30 +1,106 @@
 name: build
 
-on: workflow_dispatch
-
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
 env:
   DOTNET_VERSION: '6.0.402' # The .NET SDK version to use
+  PROJECT_NAME: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  SONAR_URL: https://codequality.softwareone.com/
 
 jobs:
   build:
-
-    name: build-${{matrix.os}}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-2019]
-
+    runs-on: windows-2019
+    name: build
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+      - uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+      - name: Install dependencies
+        run: |
+          dotnet restore
+      - name: Build
+        run: dotnet build ServBoHExtInventarioTrasladoSS.sln --configuration Debug --no-restore
 
-    - name: Install dependencies
-      run: |
-        dotnet clean
-        dotnet restore
-      
-    - name: Build
-      run: dotnet build ServBoHExtInventarioTrasladoSS.sln --configuration Debug --no-restore
+  test:
+    needs: build
+    runs-on: windows-2019
+    name: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Install dependencies
+        run: |
+          dotnet restore
+      - name: test dotnet
+        run: dotnet test --logger trx --results-directory "TestResults-${{ env.DOTNET_VERSION }}"
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-results-${{ env.DOTNET_VERSION }}
+          path: TestResults-${{ env.DOTNET_VERSION }}
+        if: ${{ always() }}
+    
+  sonarcloud:
+    needs: build
+    runs-on: windows-2019
+    name: Cache SonarCloud workspace
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Cache SonarCloud workspace
+        uses: actions/cache@v4
+        with:
+          path: ~\.sonar\cache
+          key: ${{ runner.os }}-sonar-cache
+          restore-keys: ${{ runner.os }}-sonar-cache
+
+      - name: Cache SonarCloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v3
+        with:
+          path: .\.sonar\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+
+      - name: Install SonarCloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner --version 6.0.0
+
+      - name: Scanner with SonarCloud
+        shell: powershell
+        env:
+          # Needed to get some information about the pull request, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The secret referenced in the command-line by SONAR_TOKEN should be generated
+          # from https://sonarcloud.io/account/security/
+          # The organization and project arguments (see /o and /k) are displayed
+          # on the project dashboard in SonarCloud.
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"${{ env.PROJECT_NAME }}" /o:"sonarsource" /d:sonar.token="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="${{ env.SONAR_URL }}"
+          dotnet build ServBoHExtInventarioTrasladoSS.sln
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ env.SONAR_TOKEN }}"
