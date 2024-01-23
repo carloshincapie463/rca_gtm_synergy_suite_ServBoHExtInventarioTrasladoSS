@@ -14,6 +14,7 @@ on:
 env:
   DOTNET_VERSION: '6.0.402' # The .NET SDK version to use
   PROJECT_NAME: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
+  PROJECT_KEY: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   SONAR_URL: https://codequality.softwareone.com/
 
@@ -89,7 +90,7 @@ jobs:
         shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner --version 6.0.0
+          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner --version 4.8.0
 
       - name: Scanner with SonarCloud
         shell: powershell
@@ -101,6 +102,6 @@ jobs:
           # The organization and project arguments (see /o and /k) are displayed
           # on the project dashboard in SonarCloud.
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"${{ env.PROJECT_NAME }}" /o:"sonarsource" /d:sonar.token="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="${{ env.SONAR_URL }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /n:"${{ env.PROJECT_NAME }}" /k:"${{ env.PROJECT_KEY }}" /o:"sonarsource" /d:sonar.token="${{ env.SONAR_TOKEN }}" /d:sonar.host.url="${{ env.SONAR_URL }}"
           dotnet build ServBoHExtInventarioTrasladoSS.sln
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ env.SONAR_TOKEN }}"
