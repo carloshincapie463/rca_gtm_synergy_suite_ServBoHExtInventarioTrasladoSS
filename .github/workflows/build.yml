@@ -125,14 +125,14 @@ jobs:
 
   CodeQL:
     needs: sonarcloud
-    name: Analyze
+    name: Analyze codeQl
     # Runner size impacts CodeQL analysis time. To learn more, please see:
     #   - https://gh.io/recommended-hardware-resources-for-running-codeql
     #   - https://gh.io/supported-runners-and-hardware-resources
     #   - https://gh.io/using-larger-runners
     # Consider using larger runners for possible analysis time improvements.
     runs-on: windows-latest
-    timeout-minutes: 360
+    timeout-minutes: 160
     permissions:
       # required for all workflows
       security-events: write
@@ -183,3 +183,20 @@ jobs:
       with:
         category: "/language:csharp"
         # category: "/language:${{matrix.language}}"
+
+  Dependency_Review:
+    runs-on: windows-latest
+    needs: CodeQL
+    name: Dependency_Review
+    permissions:
+      contents: read
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+      - name: 'Dependency Review'
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: 'high'
+          deny-licenses: LGPL-2.0, BSD-2-Clause
+#          allow_licenses: Apache-2.0, BSD-3-Clause, MIT
+    
