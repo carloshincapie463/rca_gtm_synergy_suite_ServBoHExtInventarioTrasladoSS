@@ -68,7 +68,7 @@ jobs:
           name: dotnet-results-${{ env.DOTNET_VERSION }}
           path: TestResults-${{ env.DOTNET_VERSION }}
         if: ${{ always() }}
-    
+
   sonarcloud:
     needs: build
     runs-on: windows-latest
@@ -196,4 +196,16 @@ jobs:
           fail-on-severity: 'high'
           deny-licenses: LGPL-2.0, BSD-2-Clause
 #          allow_licenses: Apache-2.0, BSD-3-Clause, MIT
-    
+
+  deploy:
+    needs: test
+    runs-on: windows-latest
+    name: deploy
+    steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+      - name: Output contents
+        shell: powershell
+        run: Get-ChildItem -Path .\
