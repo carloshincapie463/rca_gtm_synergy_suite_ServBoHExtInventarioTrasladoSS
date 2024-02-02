@@ -39,6 +39,13 @@ jobs:
           dotnet restore
       - name: Build
         run: dotnet build ServBoHExtInventarioTrasladoSS.sln --configuration Debug --no-restore
+      - name: Upload artifacts
+        uses: actions/upload-artifacts@v4
+        with:
+          name: dist-files
+          path: |
+            ServBoHExtInventarioTrasladoSS/bin/Debug/net6.0
+          
 
   test:
     needs: build
@@ -126,11 +133,6 @@ jobs:
   CodeQL:
     needs: sonarcloud
     name: Analyze codeQl
-    # Runner size impacts CodeQL analysis time. To learn more, please see:
-    #   - https://gh.io/recommended-hardware-resources-for-running-codeql
-    #   - https://gh.io/supported-runners-and-hardware-resources
-    #   - https://gh.io/using-larger-runners
-    # Consider using larger runners for possible analysis time improvements.
     runs-on: windows-latest
     timeout-minutes: 160
     permissions:
@@ -139,11 +141,6 @@ jobs:
       # only required for workflows in private repositories
       actions: read
       contents: read
-
-    # strategy:
-    #   fail-fast: false
-    #   matrix:
-    #     language: [ 'csharp' ]
 
     steps:
     - name: Checkout repository
