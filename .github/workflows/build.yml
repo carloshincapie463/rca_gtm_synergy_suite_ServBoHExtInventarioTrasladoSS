@@ -17,6 +17,9 @@ env:
   PROJECT_KEY: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   SONAR_URL: https://codequality.softwareone.com/
+  IP_DEPLOY: ${{secrets.IP_DEPLOY}}
+  USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
+  PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
 
 jobs:
   build:
@@ -208,4 +211,14 @@ jobs:
           name: dist-files
       - name: Output contents
         shell: powershell
-        run: Get-ChildItem -Path .\
+        run: |
+          Set-Item wsman:\localhost\client\TrustedHosts -Value ${{ env.IP_DEPLOY }} -Force
+          Write-Output ${{ github.workspace }}
+          Get-ChildItem -Path ${{ github.workspace }}
+          #Get-ChildItem -Path .\
+          #$User = "Carlos"
+          #$PWord = ConvertTo-SecureString -String "Colombia0000" -AsPlainText -Force
+          #$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord
+          #$Session = New-PSSession -ComputerName "172.191.231.77" -Credential $Credential -UseSSL
+          #Copy-Item ".\" -Destination "C:\CMI\WS\" -ToSession $Session
+          
