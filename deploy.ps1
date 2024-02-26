@@ -34,7 +34,7 @@ $ServiceDescription = "Servicio Windows rca_gtm_synergy_suite_ServBoHExtInventar
 #$DirectoryDestiny = $DIRECTORYDESTINY
 $Destination = "$($BASE)\$($DIRECTORYDESTINY)\"
 Write-Output "Destination:" + $Destination
-$ServicePath = "$($Destination)\ServBoHExtInventarioTrasladoSS.exe"
+$ServicePath = "$($Destination)$($Origin)\ServBoHExtInventarioTrasladoSS.exe"
 Write-Output "ServicePath:" + $ServicePath
 $ServiceName = "Service_$($Destination)".Replace("\","_").Replace(":","").TrimEnd("_")
 
