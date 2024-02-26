@@ -59,4 +59,4 @@ jobs:
           Get-ChildItem
           Get-ChildItem dist-files
           $ORIGIN = "dist-files"
-          ./deploy copy.ps1 ${{ env.IP_DEPLOY }} $ORIGIN ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
+          ./deploy copy.ps1 ${{ env.IP_DEPLOY }} ${{github.workspace}} ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}

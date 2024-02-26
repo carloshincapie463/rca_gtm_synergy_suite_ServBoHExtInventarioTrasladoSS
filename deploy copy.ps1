@@ -14,3 +14,4 @@ for ($i = 0; $i -lt $args.Length; $i++)
 }
 
 Write-Output $Origin
+Get-ChildItem $Origin
