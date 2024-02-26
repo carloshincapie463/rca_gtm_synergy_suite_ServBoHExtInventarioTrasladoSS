@@ -12,7 +12,7 @@ env:
   USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
   PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
   BASE: C:\CMI
-  DIRECTORYDESTINY: deploy2
+  DIRECTORYDESTINY: deploy3
 
 jobs:
   build:
