@@ -31,8 +31,8 @@ $Session = New-PSSession -ComputerName $IP_DEPLOY -Credential $Credential
 $ConfirmPreference = 'None'
 $ServiceDescription = "Servicio Windows rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS"
 $Origin = $WORKSPACE
-$DirectoryDestiny = $DIRECTORYDESTINY
-$Destination = "$($BASE)\$($DirectoryDestiny)\"
+#$DirectoryDestiny = $DIRECTORYDESTINY
+$Destination = "$($BASE)\$($DIRECTORYDESTINY)\"
 Write-Output "Destination:" + $Destination
 $ServicePath = "$($Destination)\ServBoHExtInventarioTrasladoSS.exe"
 Write-Output "ServicePath:" + $ServicePath
@@ -49,10 +49,10 @@ $resultQueryDestiny = Invoke-Command -Session $Session –ScriptBlock {
 Write-Output $resultQueryDestiny
 
 # if(!($resultQueryDestiny)){
-Invoke-Command -Session $Session –ScriptBlock {
-    param($BASE, $DirectoryDestiny)
-    New-Item -Path $BASE -Name $DirectoryDestiny -ItemType "directory" -ErrorAction SilentlyContinue
-}-ArgumentList $BASE, $DirectoryDestiny
+# Invoke-Command -Session $Session –ScriptBlock {
+#     param($BASE, $DIRECTORYDESTINY)
+#     New-Item -Path $BASE -Name $DIRECTORYDESTINY -ItemType "directory" -ErrorAction SilentlyContinue
+# }-ArgumentList $BASE, $DIRECTORYDESTINY
 # }
 
 # $service = Invoke-Command -Session $Session –ScriptBlock {
