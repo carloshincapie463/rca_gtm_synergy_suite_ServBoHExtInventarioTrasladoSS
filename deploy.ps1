@@ -70,7 +70,7 @@ if(!($service))
 {
     Write-Output "No hay servicio"
     Copy-Item $Origin -Destination $Destination -ToSession $Session -Recurse -Force
-    Invoke-Command -Session $Session –ScriptBlock {
+    Invoke-Command -Session $Session -ScriptBlock {
         param($ServiceName,$ServicePath,$ServiceDescription)
         New-Service -Name $ServiceName -BinaryPathName $ServicePath -Description $ServiceDescription
         Set-Service -Name $ServiceName -StartupType Automatic
