@@ -27,5 +27,10 @@ jobs:
       - name: Output contents
         shell: powershell
         run: |
-          ./testParameters.ps1 ${{ env.SONAR_TOKEN }} ${{env.USERNAME_DEPLOY}} ${{env.BASE}} ${{ env.IP_DEPLOY }} ${{ env.USERNAME_DEPLOY }}
+          ./deploy.ps1 ${{ env.IP_DEPLOY }} ${{github.workspace}} ${{env.USERNAME_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
           
+# $IP_DEPLOY = $args[0]
+# $WORKSPACE = $args[1]
+# $USERNAME_DEPLOY = $args[2]
+# $BASE = $args[3]
+# $DIRECTORYDESTINY = $args[4]
