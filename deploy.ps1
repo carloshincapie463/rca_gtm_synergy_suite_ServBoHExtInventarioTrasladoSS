@@ -50,8 +50,8 @@ Write-Output $resultQueryDestiny
 
 # if(!($resultQueryDestiny)){
 Invoke-Command -Session $Session –ScriptBlock {
-    param($Base, $DirectoryDestiny)
-    New-Item -Path $Base -Name $DirectoryDestiny -ItemType "directory" -ErrorAction SilentlyContinue
+    param($BASE, $DirectoryDestiny)
+    New-Item -Path $BASE -Name $DirectoryDestiny -ItemType "directory" -ErrorAction SilentlyContinue
 }-ArgumentList $BASE, $DirectoryDestiny
 # }
 
