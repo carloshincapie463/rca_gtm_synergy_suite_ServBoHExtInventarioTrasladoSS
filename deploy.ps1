@@ -40,14 +40,19 @@ $ServiceName = "Service_$($Destination)".Replace("\","_").Replace(":","").TrimEn
 
 Test-NetConnection $IP_DEPLOY -Port 5985
 
-
-$resultQueryDestiny = Invoke-Command -Session $Session –ScriptBlock
+Invoke-Command -Session $Session –ScriptBlock
 {
-    param($Destination)
-    Get-ChildItem -Path $Destination -ErrorAction SilentlyContinue
-} -ArgumentList $Destination
+    Get-Culture
+}
 
-Write-Output $resultQueryDestiny
+
+# $resultQueryDestiny = Invoke-Command -Session $Session –ScriptBlock
+# {
+#     param($Destination)
+#     Get-ChildItem -Path $Destination -ErrorAction SilentlyContinue
+# } -ArgumentList $Destination
+
+# Write-Output $resultQueryDestiny
 
 # if(!($resultQueryDestiny)){
 # Invoke-Command -Session $Session –ScriptBlock {

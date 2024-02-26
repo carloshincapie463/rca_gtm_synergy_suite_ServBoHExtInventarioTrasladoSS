@@ -43,7 +43,7 @@ jobs:
             ServBoHExtInventarioTrasladoSS/bin/Debug/net6.0
 
   deploy:
-    needs: build
+    # needs: build
     runs-on: windows-latest
     name: deploy
     steps:
