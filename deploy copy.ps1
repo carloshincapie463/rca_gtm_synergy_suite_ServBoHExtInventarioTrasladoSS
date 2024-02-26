@@ -59,7 +59,7 @@ if(!($resultQueryDestiny)){
     } -ArgumentList $BASE, $DIRECTORYDESTINY
 }
 
-$service = Invoke-Command -Session $Session –ScriptBlock {
+$service = Invoke-Command -Session $Session -ScriptBlock {
     param($ServiceName)
     Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
 }-ArgumentList $ServiceName
