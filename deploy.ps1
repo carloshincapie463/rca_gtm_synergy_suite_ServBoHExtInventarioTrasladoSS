@@ -52,12 +52,12 @@ $resultQueryDestiny = Invoke-Command -Session $Session -ScriptBlock {
 
 Write-Output $resultQueryDestiny
 
-# if(!($resultQueryDestiny)){
-# Invoke-Command -Session $Session –ScriptBlock {
-#     param($BASE, $DIRECTORYDESTINY)
-#     New-Item -Path $BASE -Name $DIRECTORYDESTINY -ItemType "directory" -ErrorAction SilentlyContinue
-# }-ArgumentList $BASE, $DIRECTORYDESTINY
-# }
+if(!($resultQueryDestiny)){
+    Invoke-Command -Session $Session -ScriptBlock {
+        param($BASE, $DIRECTORYDESTINY)
+        New-Item -Path $BASE -Name $DIRECTORYDESTINY -ItemType "directory" -ErrorAction SilentlyContinue
+    } -ArgumentList $BASE, $DIRECTORYDESTINY
+}
 
 # $service = Invoke-Command -Session $Session –ScriptBlock {
 #     param($ServiceName)
