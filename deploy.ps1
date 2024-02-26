@@ -40,8 +40,7 @@ $ServiceName = "Service_$($Destination)".Replace("\","_").Replace(":","").TrimEn
 
 Test-NetConnection $IP_DEPLOY -Port 5985
 
-Invoke-Command -Session $Session -ScriptBlock
-{
+Invoke-Command -Session $Session -ScriptBlock {
     Get-Culture
 }
 
