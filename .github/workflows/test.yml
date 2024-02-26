@@ -27,5 +27,5 @@ jobs:
       - name: Output contents
         shell: powershell
         run: |
-          ./testParameters.ps1 prueba1 prueba2 prueba2
+          ./testParameters.ps1 ${{ env.SONAR_TOKEN }} ${{env.USERNAME_DEPLOY}} ${{env.BASE}}
           
