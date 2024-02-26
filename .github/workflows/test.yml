@@ -48,10 +48,10 @@ jobs:
     name: deploy
     steps:
       - uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            deploy.ps1
-          sparse-checkout-cone-mode: false
+        # with:
+        #   sparse-checkout: |
+        #     deploy.ps1
+        #   sparse-checkout-cone-mode: false
       - name: Output contents
         shell: powershell
         run: |
