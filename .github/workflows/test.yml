@@ -52,9 +52,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist-files
+          path: dist-files
       - name: Output contents
         shell: powershell
         run: |
           Get-ChildItem
-          Get-ChildItem dist-files 
+          # Get-ChildItem dist-files 
           # ./deploy.ps1 ${{ env.IP_DEPLOY }} ${{github.workspace}} ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
