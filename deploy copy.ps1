@@ -14,7 +14,5 @@ for ($i = 0; $i -lt $args.Length; $i++)
 }
 
 Write-Output $Origin
-Get-ChildItem -Path $Origin
-Write-Output "ServicePath: " + $ServicePath
-Write-Output "ServicePath: " + $ServiceName
-Write-Output "Destino:" + $Destination
+Get-ChildItem
+# Get-ChildItem -Path $Origin
