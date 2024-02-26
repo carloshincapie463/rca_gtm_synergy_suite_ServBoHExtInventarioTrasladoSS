@@ -1,0 +1,58 @@
+name: build
+
+on: [workflow_dispatch,push]
+
+env:
+  DOTNET_VERSION: '6.0.402' # The .NET SDK version to use
+  PROJECT_NAME: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
+  PROJECT_KEY: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  SONAR_URL: https://codequality.softwareone.com/
+  IP_DEPLOY: ${{secrets.IP_DEPLOY}}
+  USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
+  PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
+  BASE: C:\CMI
+  DIRECTORYDESTINY: deploy
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+      - name: Install dependencies
+        run: |
+          dotnet restore
+      - name: Build
+        run: dotnet build ServBoHExtInventarioTrasladoSS.sln --configuration Debug --no-restore
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: |
+            ServBoHExtInventarioTrasladoSS/bin/Debug/net6.0
+
+  deploy:
+    needs: build
+    runs-on: windows-latest
+    name: deploy
+    steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+      - name: Output contents
+        shell: powershell
+        run: |
+          ./deploy.ps1 prueba1 prueba2 prueba2
+          
