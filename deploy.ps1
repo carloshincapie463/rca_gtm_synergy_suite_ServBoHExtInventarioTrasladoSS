@@ -13,7 +13,7 @@ for ($i = 0; $i -lt $args.Length; $i++)
     Write-Host $args[$i]
 }
 
-Write-Output $Origin
+
 Get-ChildItem -Path $Origin
 Write-Output "ServicePath: " + $ServicePath
 Write-Output "ServicePath: " + $ServiceName

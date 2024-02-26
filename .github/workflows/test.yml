@@ -12,7 +12,7 @@ env:
   USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
   PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
   BASE: C:\CMI
-  DIRECTORYDESTINY: deploy3
+  DIRECTORYDESTINY: deploy4
 
 jobs:
   build:
@@ -56,7 +56,5 @@ jobs:
       - name: Output contents
         shell: powershell
         run: |
-          Get-ChildItem
-          Get-ChildItem dist-files
           $ORIGIN = "dist-files"
-          ./deploy_copy.ps1 ${{ env.IP_DEPLOY }} $ORIGIN ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
+          ./deploy.ps1 ${{ env.IP_DEPLOY }} $ORIGIN ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
