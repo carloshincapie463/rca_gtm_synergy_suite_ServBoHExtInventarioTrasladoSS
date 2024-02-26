@@ -15,35 +15,7 @@ env:
   DIRECTORYDESTINY: deploy
 
 jobs:
-  build:
-    runs-on: windows-latest
-    name: build
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-      - uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget
-      - name: Install dependencies
-        run: |
-          dotnet restore
-      - name: Build
-        run: dotnet build ServBoHExtInventarioTrasladoSS.sln --configuration Debug --no-restore
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-files
-          path: |
-            ServBoHExtInventarioTrasladoSS/bin/Debug/net6.0
-
   deploy:
-    needs: build
     runs-on: windows-latest
     name: deploy
     steps:
@@ -54,5 +26,5 @@ jobs:
       - name: Output contents
         shell: powershell
         run: |
-          ./deploy.ps1 prueba1 prueba2 prueba2
+          ./testParameters.ps1 prueba1 prueba2 prueba2
           
