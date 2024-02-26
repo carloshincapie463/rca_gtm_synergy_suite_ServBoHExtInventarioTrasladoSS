@@ -19,10 +19,11 @@ jobs:
     runs-on: windows-latest
     name: deploy
     steps:
-      # - name: Get build artifacts
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: dist-files
+      - uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Output contents
         shell: powershell
         run: |
