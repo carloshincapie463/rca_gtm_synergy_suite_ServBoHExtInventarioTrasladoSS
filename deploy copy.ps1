@@ -65,3 +65,38 @@ $service = Invoke-Command -Session $Session –ScriptBlock {
 }-ArgumentList $ServiceName
 
 Write-Output $service.Status
+
+# if(!($service))
+# {
+#     Write-Output "No hay servicio"
+#     Copy-Item $Origin -Destination $Destination -ToSession $Session -Recurse -Force
+#     Invoke-Command -Session $Session -ScriptBlock {
+#         param($ServiceName,$ServicePath,$ServiceDescription)
+#         New-Service -Name $ServiceName -BinaryPathName $ServicePath -Description $ServiceDescription
+#         Set-Service -Name $ServiceName -StartupType Automatic
+#     }-ArgumentList $ServiceName,$ServicePath,$ServiceDescription
+# }
+# else
+# {
+#     if (!($service.Started))
+#     {
+#         Write-Output "Servicio Existe"
+#         Invoke-Command -Session $Session -ScriptBlock {
+#             param($ServiceName)
+#             Stop-Service -Name $ServiceName
+#         }-ArgumentList $ServiceName
+#         Copy-Item $Origin -Destination $Destination -ToSession $Session -Recurse -Force
+#     } 
+# }
+
+# Invoke-Command -Session $Session -ScriptBlock {
+#     param($ServiceName)
+#     Start-Service -Name $ServiceName
+# }-ArgumentList $ServiceName
+
+# $service = Invoke-Command -Session $Session -ScriptBlock {
+#     param($ServiceName)
+#     Get-Service -Name $ServiceName -ErrorAction SilentlyContinue
+# }-ArgumentList $ServiceName
+
+# Write-Output $service.Status
