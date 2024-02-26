@@ -15,22 +15,48 @@ env:
   DIRECTORYDESTINY: deploy
 
 jobs:
-  deploy:
+  build:
     runs-on: windows-latest
-    name: deploy
+    name: build
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+      - uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+      - name: Install dependencies
+        run: |
+          dotnet restore
+      - name: Build
+        run: dotnet build ServBoHExtInventarioTrasladoSS.sln --configuration Debug --no-restore
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: |
+            ServBoHExtInventarioTrasladoSS/bin/Debug/net6.0
+
+  deploy:
+    needs: build
+    runs-on: windows-latest
+    name: deploy
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            deploy.ps1
+          sparse-checkout-cone-mode: false
+      # - name: Setup .NET Core
+      #   uses: actions/setup-dotnet@v3
+      #   with:
+      #     dotnet-version: ${{ env.DOTNET_VERSION }}
       - name: Output contents
         shell: powershell
         run: |
           ./deploy.ps1 ${{ env.IP_DEPLOY }} ${{github.workspace}} ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
-          
-# $IP_DEPLOY = $args[0]
-# $WORKSPACE = $args[1]
-# $USERNAME_DEPLOY = $args[2]
-# $BASE = $args[3]
-# $DIRECTORYDESTINY = $args[4]
