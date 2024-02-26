@@ -1,5 +1,5 @@
 $IP_DEPLOY = $args[0]
-$WORKSPACE = $args[1]
+$Origin = $args[1]
 $USERNAME_DEPLOY = $args[2]
 $PASSWORD_DEPLOY = $args[3]
 $BASE = $args[4]
@@ -13,8 +13,8 @@ for ($i = 0; $i -lt $args.Length; $i++)
     Write-Host $args[$i]
 }
 
-Write-Output $WORKSPACE
-Get-ChildItem -Path $WORKSPACE
+Write-Output $Origin
+Get-ChildItem -Path $Origin
 Write-Output "ServicePath: " + $ServicePath
 Write-Output "ServicePath: " + $ServiceName
 Write-Output "Destino:" + $Destination
@@ -30,7 +30,7 @@ $Credential = New-Object -TypeName System.Management.Automation.PSCredential -Ar
 $Session = New-PSSession -ComputerName $IP_DEPLOY -Credential $Credential
 $ConfirmPreference = 'None'
 $ServiceDescription = "Servicio Windows rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS"
-$Origin = $WORKSPACE
+# $Origin = $WORKSPACE
 #$DirectoryDestiny = $DIRECTORYDESTINY
 $Destination = "$($BASE)\$($DIRECTORYDESTINY)\"
 Write-Output "Destination:" + $Destination
