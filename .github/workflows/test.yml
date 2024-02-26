@@ -56,7 +56,7 @@ jobs:
       - name: Output contents
         shell: powershell
         run: |
-          # Get-ChildItem
-          # Get-ChildItem dist-files
+          Get-ChildItem
+          Get-ChildItem dist-files
           $ORIGIN = "dist-files"
           ./deploy copy.ps1 ${{ env.IP_DEPLOY }} $ORIGIN ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
