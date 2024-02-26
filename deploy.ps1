@@ -1,8 +1,9 @@
 $IP_DEPLOY = $args[0]
 $WORKSPACE = $args[1]
 $USERNAME_DEPLOY = $args[2]
-$BASE = $args[3]
-$DIRECTORYDESTINY = $args[4]
+$PASSWORD_DEPLOY = $args[3]
+$BASE = $args[4]
+$DIRECTORYDESTINY = $args[5]
 
 write-host "There are a total of $($args.count) arguments"
 
@@ -12,11 +13,19 @@ for ($i = 0; $i -lt $args.Length; $i++)
     Write-Host $args[$i]
 }
 
-Set-Item wsman:\localhost\client\TrustedHosts -Value $IP_DEPLOY -Force
 Write-Output $WORKSPACE
 Get-ChildItem -Path $WORKSPACE
+Write-Output "ServicePath: " + $ServicePath
+Write-Output "ServicePath: " + $ServiceName
+Write-Output "Destino:" + $Destination
+
+
+Set-Item wsman:\localhost\client\TrustedHosts -Value $IP_DEPLOY -Force
+get-Item WSMan:\localhost\Client\TrustedHosts
+
 $User = "$($IP_DEPLOY)\$($USERNAME_DEPLOY)"
-$PWord = ConvertTo-SecureString -String $IP_DEPLOY -AsPlainText -Force
+Write-Output "User:" + $User
+$PWord = ConvertTo-SecureString -String $PASSWORD_DEPLOY -AsPlainText -Force
 $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord
 $Session = New-PSSession -ComputerName $IP_DEPLOY -Credential $Credential
 $ConfirmPreference = 'None'
@@ -24,13 +33,12 @@ $ServiceDescription = "Servicio Windows rca_gtm_synergy_suite_ServBoHExtInventar
 $Origin = $WORKSPACE
 $DirectoryDestiny = $DIRECTORYDESTINY
 $Destination = "$($BASE)\$($DirectoryDestiny)\"
-Write-Output "Destino:" + $Destination
+Write-Output "Destination:" + $Destination
 $ServicePath = "$($Destination)\ServBoHExtInventarioTrasladoSS.exe"
+Write-Output "ServicePath:" + $ServicePath
 $ServiceName = "Service_$($Destination)".Replace("\","_").Replace(":","").TrimEnd("_")
-Write-Output "ServicePath: " + $ServicePath
-Write-Output "ServicePath: " + $ServiceName
-get-Item WSMan:\localhost\Client\TrustedHosts
-Test-NetConnection 172.191.231.77 -Port 5985
+
+Test-NetConnection $IP_DEPLOY -Port 5985
 
 
 # $resultQueryDestiny = Invoke-Command -Session $Session –ScriptBlock {

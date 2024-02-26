@@ -27,7 +27,7 @@ jobs:
       - name: Output contents
         shell: powershell
         run: |
-          ./deploy.ps1 ${{ env.IP_DEPLOY }} ${{github.workspace}} ${{env.USERNAME_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
+          ./deploy.ps1 ${{ env.IP_DEPLOY }} ${{github.workspace}} ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
           
 # $IP_DEPLOY = $args[0]
 # $WORKSPACE = $args[1]
