@@ -45,13 +45,12 @@ Invoke-Command -Session $Session -ScriptBlock {
 }
 
 
-# $resultQueryDestiny = Invoke-Command -Session $Session –ScriptBlock
-# {
-#     param($Destination)
-#     Get-ChildItem -Path $Destination -ErrorAction SilentlyContinue
-# } -ArgumentList $Destination
+$resultQueryDestiny = Invoke-Command -Session $Session -ScriptBlock {
+     param($Destination)
+     Get-ChildItem -Path $Destination -ErrorAction SilentlyContinue
+} -ArgumentList $Destination
 
-# Write-Output $resultQueryDestiny
+Write-Output $resultQueryDestiny
 
 # if(!($resultQueryDestiny)){
 # Invoke-Command -Session $Session –ScriptBlock {
