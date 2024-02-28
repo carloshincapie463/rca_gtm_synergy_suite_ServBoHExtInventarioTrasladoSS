@@ -1,15 +1,15 @@
 ﻿
-$filePath = $args[0]
-$urlApiColas = $args[1]
-$apiConexionDB = $args[2]
-$nombreServicio = $args[3]
-$servicioDestino = $args[4]
-$conexionDB = $args[5]
-$conexionDB2 = $args[6]
-$correo = $args[7]
-$idMenu = $args[8]
-$ambiente = $args[9]
-$directorioBitacoraErrores = $args[10]
+$filePath = $args[0].ToString()
+$urlApiColas = $args[1].ToString()
+$apiConexionDB = $args[2].ToString()
+$nombreServicio = $args[3].ToString()
+$servicioDestino = $args[4].ToString()
+$conexionDB = $args[5].ToString()
+$conexionDB2 = $args[6].ToString()
+$correo = $args[7].ToString()
+$idMenu = $args[8].ToString()
+$ambiente = $args[9].ToString()
+$directorioBitacoraErrores = $args[10].ToString()
 
 write-host "There are a total of $($args.count) arguments"
 
