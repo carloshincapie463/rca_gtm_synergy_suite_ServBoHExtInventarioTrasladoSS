@@ -50,18 +50,8 @@ jobs:
       IP_DEPLOY: ${{secrets.IP_DEPLOY}}
       USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
       PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
-      BASE: C:\CMI
-      DIRECTORYDESTINY: deploy6
-      # URLAPICOLAS: ${{vars.URLAPICOLAS}}
-      # APICONEXIONDB: ${{vars.APICONEXIONDB}}
-      # NOMBRESERVICIO: ${{vars.NOMBRESERVICIO}}
-      # SERVICIODESTINO: ${{vars.SERVICIODESTINO}}
-      # CONEXIONDB: ${{vars.CONEXIONDB}}
-      # CONEXIONDB2: ${{vars.CONEXIONDB2}}
-      # CORREO: ${{vars.CORREO}}
-      # IDMENU: ${{vars.IDMENU}}
-      # AMBIENTE: ${{vars.AMBIENTE}}
-      # DIRECTORIOBITACORAERRORES: ${{vars.DIRECTORIOBITACORAERRORES}}
+      BASE: ${{vars.BASE}}
+      DIRECTORYDESTINY: ${{vars.DIRECTORYDESTINY}}
     needs: build
     runs-on: windows-latest
     name: deploy
