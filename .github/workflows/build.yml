@@ -1,27 +1,15 @@
 name: build
 
 on: 
-  # workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
-  #     - dev
   pull_request:
     types:
       - opened
-      - synchronize
-      - reopened
 env:
   DOTNET_VERSION: '6.0.402' # The .NET SDK version to use
   PROJECT_NAME: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
   PROJECT_KEY: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   SONAR_URL: https://codequality.softwareone.com/
-  IP_DEPLOY: ${{secrets.IP_DEPLOY}}
-  USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
-  PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
-  BASE: C:\CMI
-  DIRECTORYDESTINY: deploy
 
 jobs:
   build:
@@ -49,8 +37,7 @@ jobs:
         with:
           name: dist-files
           path: |
-            ServBoHExtInventarioTrasladoSS/bin/Debug/net6.0
-          
+            ServBoHExtInventarioTrasladoSS/bin/Debug/net6.0        
 
   test:
     needs: build
@@ -75,7 +62,7 @@ jobs:
         if: ${{ always() }}
 
   sonarcloud:
-    needs: build
+    needs: test
     runs-on: windows-latest
     name: SonarCloud
     steps:
@@ -187,8 +174,8 @@ jobs:
         # category: "/language:${{matrix.language}}"
 
   Dependency_Review:
-    runs-on: windows-latest
     needs: CodeQL
+    runs-on: windows-latest
     name: Dependency_Review
     permissions:
       contents: read
@@ -203,16 +190,26 @@ jobs:
 #          allow_licenses: Apache-2.0, BSD-3-Clause, MIT
 
   deploy:
-    needs: test
+    environment: testing
+    env:
+      IP_DEPLOY: ${{secrets.IP_DEPLOY}}
+      USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
+      PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
+      BASE: C:\CMI
+      DIRECTORYDESTINY: deploy5
+    needs: build
     runs-on: windows-latest
     name: deploy
     steps:
+      - uses: actions/checkout@v4
       - name: Get build artifacts
         uses: actions/download-artifact@v4
         with:
           name: dist-files
+          path: dist-files
       - name: Output contents
         shell: powershell
         run: |
-          ./deploy.ps1 
+          $ORIGIN = "dist-files"
+          ./deploy.ps1 ${{ env.IP_DEPLOY }} $ORIGIN ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }} 
           

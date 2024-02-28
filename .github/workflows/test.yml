@@ -1,19 +1,21 @@
 name: test
 
-on: [workflow_dispatch,push]
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main # main
+      - 'dev*' # developer dev-new developerback
+  push:
+    branches:
+      - main # main
+      - 'dev*' # developer dev-new developerback
+    paths-ignore:
+      - '.github/workflow/*'
 
 env:
   DOTNET_VERSION: '6.0.402' # The .NET SDK version to use
-  PROJECT_NAME: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
-  PROJECT_KEY: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  SONAR_URL: https://codequality.softwareone.com/
-  IP_DEPLOY: ${{secrets.IP_DEPLOY}}
-  USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
-  PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
-  BASE: C:\CMI
-  DIRECTORYDESTINY: deploy5
-
 jobs:
   build:
     runs-on: windows-latest
@@ -42,7 +44,24 @@ jobs:
           path: |
             ServBoHExtInventarioTrasladoSS/bin/Debug/net6.0
 
-  deploy:
+  deploytest:
+    environment: testing
+    env:
+      IP_DEPLOY: ${{secrets.IP_DEPLOY}}
+      USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
+      PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
+      BASE: C:\CMI
+      DIRECTORYDESTINY: deploy6
+      # URLAPICOLAS: ${{vars.URLAPICOLAS}}
+      # APICONEXIONDB: ${{vars.APICONEXIONDB}}
+      # NOMBRESERVICIO: ${{vars.NOMBRESERVICIO}}
+      # SERVICIODESTINO: ${{vars.SERVICIODESTINO}}
+      # CONEXIONDB: ${{vars.CONEXIONDB}}
+      # CONEXIONDB2: ${{vars.CONEXIONDB2}}
+      # CORREO: ${{vars.CORREO}}
+      # IDMENU: ${{vars.IDMENU}}
+      # AMBIENTE: ${{vars.AMBIENTE}}
+      # DIRECTORIOBITACORAERRORES: ${{vars.DIRECTORIOBITACORAERRORES}}
     needs: build
     runs-on: windows-latest
     name: deploy
@@ -57,4 +76,5 @@ jobs:
         shell: powershell
         run: |
           $ORIGIN = "dist-files"
+          ./updateconfig.ps1 "$($ORIGIN)/ServBoHExtInventarioTrasladoSS.dll.config" ${{vars.URLAPICOLAS}} ${{vars.APICONEXIONDB}} ${{vars.NOMBRESERVICIO}} ${{vars.SERVICIODESTINO}} ${{vars.CONEXIONDB}} ${{vars.CONEXIONDB2}} ${{vars.CORREO}} ${{vars.IDMENU}} ${{vars.AMBIENTE}} ${{vars.DIRECTORIOBITACORAERRORES}}
           ./deploy.ps1 ${{ env.IP_DEPLOY }} $ORIGIN ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
