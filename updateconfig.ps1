@@ -11,7 +11,18 @@ $idMenu = $args[8]
 $ambiente = $args[9]
 $directorioBitacoraErrores = $args[10]
 
-#Write-Output $filePath
+write-host "There are a total of $($args.count) arguments"
+
+for ($i = 0; $i -lt $args.Length; $i++)
+{
+    # Output the current item
+    Write-Host $args[$i]
+}
+
+# Write-Output $filePath
+
+Get-Content -Path $filePath
+
 #Write-Output $urlApiColas
 # file not found, nothing to do
 if (-Not (Test-Path $filePath))
