@@ -6,10 +6,6 @@ on:
       - opened
 env:
   DOTNET_VERSION: '6.0.402' # The .NET SDK version to use
-  PROJECT_NAME: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
-  PROJECT_KEY: CMI.rca_gtm_synergy_suite_ServBoHExtInventarioTrasladoSS
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  SONAR_URL: https://codequality.softwareone.com/
 
 jobs:
   build:
@@ -62,6 +58,12 @@ jobs:
         if: ${{ always() }}
 
   sonarcloud:
+    environment: SONAR
+    env:
+      PROJECT_NAME: ${{vars.PROJECT_NAME}}
+      PROJECT_KEY: ${{vars.PROJECT_KEY}}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_URL: ${{vars.SONAR_URL}}
     needs: test
     runs-on: windows-latest
     name: SonarCloud
@@ -189,15 +191,15 @@ jobs:
           deny-licenses: LGPL-2.0, BSD-2-Clause
 #          allow_licenses: Apache-2.0, BSD-3-Clause, MIT
 
-  deploy:
+  DeployTest:
     environment: testing
     env:
       IP_DEPLOY: ${{secrets.IP_DEPLOY}}
       USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
       PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
-      BASE: C:\CMI
-      DIRECTORYDESTINY: deploy5
-    needs: build
+      BASE: ${{vars.BASE}}
+      DIRECTORYDESTINY: ${{vars.DIRECTORYDESTINY}}
+    needs: Dependency_Review
     runs-on: windows-latest
     name: deploy
     steps:
@@ -211,5 +213,30 @@ jobs:
         shell: powershell
         run: |
           $ORIGIN = "dist-files"
+          ./updateconfig.ps1 "$($ORIGIN)/ServBoHExtInventarioTrasladoSS.dll.config" ${{vars.URLAPICOLAS}} ${{vars.APICONEXIONDB}} ${{vars.NOMBRESERVICIO}} ${{vars.SERVICIODESTINO}} ${{vars.CONEXIONDB}} ${{vars.CONEXIONDB2}} ${{vars.CORREO}} ${{vars.IDMENU}} ${{vars.AMBIENTE}} ${{vars.DIRECTORIOBITACORAERRORES}}
           ./deploy.ps1 ${{ env.IP_DEPLOY }} $ORIGIN ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }} 
-          
+    
+  DeployProd:
+    environment: production
+    env:
+      IP_DEPLOY: ${{secrets.IP_DEPLOY}}
+      USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
+      PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
+      BASE: ${{vars.BASE}}
+      DIRECTORYDESTINY: ${{vars.DIRECTORYDESTINY}}
+    needs: DeployTest
+    runs-on: windows-latest
+    name: deploy
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist-files
+      - name: Output contents
+        shell: powershell
+        run: |
+          $ORIGIN = "dist-files"
+          ./updateconfig.ps1 "$($ORIGIN)/ServBoHExtInventarioTrasladoSS.dll.config" ${{vars.URLAPICOLAS}} ${{vars.APICONEXIONDB}} ${{vars.NOMBRESERVICIO}} ${{vars.SERVICIODESTINO}} ${{vars.CONEXIONDB}} ${{vars.CONEXIONDB2}} ${{vars.CORREO}} ${{vars.IDMENU}} ${{vars.AMBIENTE}} ${{vars.DIRECTORIOBITACORAERRORES}}
+          ./deploy.ps1 ${{ env.IP_DEPLOY }} $ORIGIN ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}  
