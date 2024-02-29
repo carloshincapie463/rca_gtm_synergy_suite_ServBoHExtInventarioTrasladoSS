@@ -19,8 +19,7 @@ env:
 jobs:
   build:
     #runs-on: windows-latest
-    runs-on: self-hosted
-    #container: runnerCMI
+    runs-on: self-hosted-cmi
     name: build
     steps:
       - uses: actions/checkout@v4
@@ -46,7 +45,7 @@ jobs:
           path: |
             ServBoHExtInventarioTrasladoSS/bin/Debug/net6.0
 
-  deploytest:
+  deployTest:
     environment: testing
     env:
       IP_DEPLOY: ${{secrets.IP_DEPLOY}}
@@ -56,9 +55,33 @@ jobs:
       DIRECTORYDESTINY: ${{vars.DIRECTORYDESTINY}}
     needs: build
     #runs-on: windows-latest
-    runs-on: self-hosted
-    #container: runnerCMI
-    name: deploy
+    runs-on: self-hosted-cmi
+    name: deploytest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist-files
+      - name: Output contents
+        shell: powershell
+        run: |
+          $ORIGIN = "dist-files"
+          ./updateconfig.ps1 "$($ORIGIN)/ServBoHExtInventarioTrasladoSS.dll.config" ${{vars.URLAPICOLAS}} ${{vars.APICONEXIONDB}} ${{vars.NOMBRESERVICIO}} ${{vars.SERVICIODESTINO}} ${{vars.CONEXIONDB}} ${{vars.CONEXIONDB2}} ${{vars.CORREO}} ${{vars.IDMENU}} ${{vars.AMBIENTE}} ${{vars.DIRECTORIOBITACORAERRORES}}
+          ./deploy.ps1 ${{ env.IP_DEPLOY }} $ORIGIN ${{env.USERNAME_DEPLOY}} ${{env.PASSWORD_DEPLOY}} ${{ env.BASE }} ${{ env.DIRECTORYDESTINY }}
+  
+  deployProd:
+    environment: production
+    env:
+      IP_DEPLOY: ${{secrets.IP_DEPLOY}}
+      USERNAME_DEPLOY: ${{secrets.USERNAME_DEPLOY}}
+      PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
+      BASE: ${{vars.BASE}}
+      DIRECTORYDESTINY: ${{vars.DIRECTORYDESTINY}}
+    needs: deployTest
+    runs-on: self-hosted-cmi
+    name: deployprod
     steps:
       - uses: actions/checkout@v4
       - name: Get build artifacts
