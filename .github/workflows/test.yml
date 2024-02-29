@@ -20,7 +20,7 @@ jobs:
   build:
     #runs-on: windows-latest
     runs-on: self-hosted
-    container: runnerCMI
+    #container: runnerCMI
     name: build
     steps:
       - uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
     needs: build
     #runs-on: windows-latest
     runs-on: self-hosted
-    container: runnerCMI
+    #container: runnerCMI
     name: deploy
     steps:
       - uses: actions/checkout@v4
