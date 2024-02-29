@@ -18,7 +18,9 @@ env:
   DOTNET_VERSION: '6.0.402' # The .NET SDK version to use
 jobs:
   build:
-    runs-on: windows-latest
+    #runs-on: windows-latest
+    runs-on: self-hosted
+    container: runnerCMI
     name: build
     steps:
       - uses: actions/checkout@v4
@@ -53,7 +55,9 @@ jobs:
       BASE: ${{vars.BASE}}
       DIRECTORYDESTINY: ${{vars.DIRECTORYDESTINY}}
     needs: build
-    runs-on: windows-latest
+    #runs-on: windows-latest
+    runs-on: self-hosted
+    container: runnerCMI
     name: deploy
     steps:
       - uses: actions/checkout@v4
