@@ -17,7 +17,8 @@ env:
 
 jobs:
   build:
-    runs-on: self-hosted-cmi
+    # runs-on: self-hosted-cmi
+    runs-on: windows-latest
     name: build
     steps:
       - uses: actions/checkout@v4
@@ -45,7 +46,8 @@ jobs:
 
   test:
     needs: build
-    runs-on: self-hosted-cmi
+    runs-on: windows-latest
+    # runs-on: self-hosted-cmi
     name: test
     steps:
       - uses: actions/checkout@v4
