@@ -4,12 +4,14 @@ on:
   pull_request:
     types:
       - opened
+    branches:
+      - main
 env:
   DOTNET_VERSION: '6.0.402' # The .NET SDK version to use
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: self-hosted-cmi
     name: build
     steps:
       - uses: actions/checkout@v4
@@ -37,7 +39,7 @@ jobs:
 
   test:
     needs: build
-    runs-on: windows-latest
+    runs-on: self-hosted-cmi
     name: test
     steps:
       - uses: actions/checkout@v4
@@ -127,7 +129,7 @@ jobs:
   CodeQL:
     needs: sonarcloud
     name: Analyze codeQl
-    runs-on: windows-latest
+    runs-on: self-hosted-cmi
     timeout-minutes: 160
     permissions:
       # required for all workflows
@@ -177,7 +179,7 @@ jobs:
 
   Dependency_Review:
     needs: CodeQL
-    runs-on: windows-latest
+    runs-on: self-hosted-cmi
     name: Dependency_Review
     permissions:
       contents: read
@@ -200,8 +202,8 @@ jobs:
       BASE: ${{vars.BASE}}
       DIRECTORYDESTINY: ${{vars.DIRECTORYDESTINY}}
     needs: Dependency_Review
-    runs-on: windows-latest
-    name: deploy
+    runs-on: self-hosted-cmi
+    name: deploytest
     steps:
       - uses: actions/checkout@v4
       - name: Get build artifacts
@@ -225,8 +227,8 @@ jobs:
       BASE: ${{vars.BASE}}
       DIRECTORYDESTINY: ${{vars.DIRECTORYDESTINY}}
     needs: DeployTest
-    runs-on: windows-latest
-    name: deploy
+    runs-on: self-hosted-cmi
+    name: deployprod
     steps:
       - uses: actions/checkout@v4
       - name: Get build artifacts
