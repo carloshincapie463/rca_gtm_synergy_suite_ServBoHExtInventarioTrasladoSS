@@ -9,7 +9,7 @@ on:
   push:
     branches:
       - main # main
-      - 'dev*' # developer dev-new developerback
+      - developer
     # paths-ignore:
     #   - '.github/workflow/*'
 env:
