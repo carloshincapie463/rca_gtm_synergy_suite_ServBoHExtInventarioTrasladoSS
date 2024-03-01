@@ -6,6 +6,12 @@ on:
       - opened
     branches:
       - main
+  push:
+    branches:
+      - main # main
+      - 'dev*' # developer dev-new developerback
+    paths-ignore:
+      - '.github/workflow/*'
 env:
   DOTNET_VERSION: '6.0.402' # The .NET SDK version to use
 
