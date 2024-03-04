@@ -11,7 +11,8 @@ env:
 
 jobs:
   build:
-    runs-on: self-hosted-cmi
+    # runs-on: self-hosted-cmi
+    runs-on: windows-latest
     name: build
     steps:
       - uses: actions/checkout@v4
@@ -39,7 +40,8 @@ jobs:
 
   test:
     needs: build
-    runs-on: self-hosted-cmi
+    # runs-on: self-hosted-cmi
+    runs-on: windows-latest
     name: test
     steps:
       - uses: actions/checkout@v4
@@ -135,7 +137,8 @@ jobs:
   CodeQL:
     needs: sonarcloud
     name: Analyze codeQl
-    runs-on: self-hosted-cmi
+    # runs-on: self-hosted-cmi
+    runs-on: windows-latest
     timeout-minutes: 160
     permissions:
       # required for all workflows
@@ -185,7 +188,8 @@ jobs:
 
   Dependency_Review:
     needs: CodeQL
-    runs-on: self-hosted-cmi
+    # runs-on: self-hosted-cmi
+    runs-on: windows-latest
     name: Dependency_Review
     permissions:
       contents: read
