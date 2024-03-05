@@ -2,8 +2,6 @@ name: cd
 
 on: 
   pull_request:
-    types:
-      - opened
     branches:
       - release
 env:
@@ -36,7 +34,7 @@ jobs:
         with:
           name: dist-files
           path: |
-            ServBoHExtInventarioTrasladoSS/bin/Debug/net6.0        
+            ServBoHExtInventarioTrasladoSS/bin/Release/net6.0      
 
   test:
     needs: build
@@ -83,12 +81,6 @@ jobs:
           key: ${{ runner.os }}-sonar-cache
           restore-keys: ${{ runner.os }}-sonar-cache
       
-      # - name: Version jdk current
-      #   shell: cmd
-      #   run: |
-      #    echo %PATH%
-      #    echo %JAVA_HOME_17_X64%
-      #    java -version
       
       - name: Change Version of Java to JDK17
         uses: actions/setup-java@v4
@@ -99,11 +91,6 @@ jobs:
       - name: Version jdk current after change
         shell: cmd
         run: java -version
-
-      # - name: Setup .NET Core
-      #   uses: actions/setup-dotnet@v4
-      #   with:
-      #     dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
