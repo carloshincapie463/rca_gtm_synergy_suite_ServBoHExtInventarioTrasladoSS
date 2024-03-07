@@ -44,7 +44,7 @@ jobs:
       PASSWORD_DEPLOY: ${{secrets.PASSWORD_DEPLOY}}
       BASE: ${{vars.BASE}}
       DIRECTORYDESTINY: ${{vars.DIRECTORYDESTINY}}
-    needs: Dependency_Review
+    needs: build
     runs-on: self-hosted-cmi
     name: deploytest
     steps:
